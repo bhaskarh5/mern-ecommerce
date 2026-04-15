@@ -7,12 +7,13 @@ const User= require("../models/User")
 router.post("/register",async (req,res)=>{
     try{
         const {name,email,password,mobile}=req.body 
+        console.log("----------",name,email,password,mobile)
         const existingUser= await User.findOne({email})
 
         if(existingUser){
             return res.status(401).json({message:"User already exists"})
         }
-        const hashedPassword= bcrypt.hash(password,10)
+        const hashedPassword=await bcrypt.hash(password,10)
         const user=await User.create({
             name,email,password:hashedPassword,mobile
         })
